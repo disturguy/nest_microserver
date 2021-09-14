@@ -13,8 +13,12 @@ export class UsersController {
     @ApiOkResponse({type: User, isArray: true})
     @ApiQuery({name:"name", required: false})
     @Get()
-    getUsers(@Query('name') name: string): User[] {
-        return this.usersService.findAll(name);
+    // getUsers(@Query('name') name: string): User[] {
+    //     return this.usersService.findAll(name);
+    // }
+
+    getAllUsers(): Promise<User[]>{
+        return this.usersService.getAll();
     }
 
     @ApiOkResponse({type: User, description:"The user"})
@@ -34,7 +38,11 @@ export class UsersController {
     @ApiCreatedResponse({type: User})
     @ApiBadRequestResponse()
     @Post()
-    createUser(@Body() body: CreateUserDto): User {
-        return this.usersService.createUsers(body);
-    } 
+    // createUser(@Body() body: CreateUserDto): User {
+    //     return this.usersService.createUser(body);
+    // } 
+
+    ftiaxeUser(@Body() body: CreateUserDto): Promise<User> {
+        return this.usersService.createUser(body);
+    }
 }
