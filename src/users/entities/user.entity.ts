@@ -13,6 +13,15 @@ export class User {
     @ApiProperty()
     name: string;
 
+    @Column()
+    @ApiProperty()
+    username: string;
+
+    @Column()
+    @ApiProperty()
+    password: string;
+
+    @ApiProperty()
     @OneToMany(type => Pet, pet => pet.owner)
     pets: Pet[]
 }

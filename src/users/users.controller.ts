@@ -1,5 +1,5 @@
 import { Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
-import { Query } from '@nestjs/common/decorators/http/route-params.decorator';
+//import { Query } from '@nestjs/common/decorators/http/route-params.decorator';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -17,16 +17,16 @@ export class UsersController {
     //     return this.usersService.findAll(name);
     // }
 
-    getAllUsers(): Promise<User[]>{
-        return this.usersService.getAll();
+    inMemorygetAllUsers(): Promise<User[]>{
+        return this.usersService.inDBgetAll();
     }
 
     @ApiOkResponse({type: User, description:"The user"})
     @ApiNotFoundResponse()
     @Get(':id')
-    getUSerById(@Param('id', ParseIntPipe) id: number ): User {
+    inMemorygetUSerById(@Param('id', ParseIntPipe) id: number ): User {
 
-        const user =  this.usersService.findById(id);
+        const user =  this.usersService.inMemoryfindById(id);
 
         if (!user) {
             throw new NotFoundException;
@@ -42,7 +42,7 @@ export class UsersController {
     //     return this.usersService.createUser(body);
     // } 
 
-    ftiaxeUser(@Body() body: CreateUserDto): Promise<User> {
-        return this.usersService.createUser(body);
+    inDBcreateUser(@Body() body: CreateUserDto): Promise<User> {
+        return this.usersService.inDBcreateUser(body);
     }
 }

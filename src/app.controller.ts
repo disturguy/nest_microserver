@@ -1,12 +1,28 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body } from '@nestjs/common/decorators';
+import { ApiCreatedResponse } from '@nestjs/swagger';
+import { AuthService } from './auth/auth.service';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { LocalAuthGuard } from './auth/local-auth.guard';
+import { AuthUserDTO } from './users/dto/auth-user.dto';
+import { ValidatedUser } from './users/dto/validated-user.dto';
+import { User } from './users/entities/user.entity';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+
+  @ApiCreatedResponse({type: ValidatedUser})
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(@Request() req, @Body() body: AuthUserDTO): any {
+    return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  getHello(@Request() req): string {
+    return req.user;
   }
 }
